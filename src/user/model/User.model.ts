@@ -1,12 +1,13 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Forms } from '../../forms/model/Forms.model';
 
-interface UsersCreationAttrs {
+interface UserCreationAttrs {
   email: string;
   nickname: string;
 }
 
 @Table({ tableName: 'user', updatedAt: false })
-export class User extends Model<User, UsersCreationAttrs> {
+export class User extends Model<User, UserCreationAttrs> {
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -23,4 +24,7 @@ export class User extends Model<User, UsersCreationAttrs> {
 
   @Column({ type: DataType.STRING, allowNull: true })
   avatar: string;
+
+  @HasMany(() => Forms)
+  forms: Forms[];
 }
