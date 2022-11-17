@@ -8,6 +8,9 @@ import { Forms } from './forms/model/Forms.model';
 import { FormsModule } from './forms/forms.module';
 import { resolve } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
+import { QuestionsModule } from './questions/questions.module';
+import { Questions } from './questions/model/Questions.model';
 
 @Module({
   controllers: [],
@@ -26,12 +29,14 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Forms],
+      models: [User, Forms, Questions],
       autoLoadModels: true,
     }),
     UserModule,
     FormsModule,
     AuthModule,
+    FileModule,
+    QuestionsModule,
   ],
 })
 export class AppModule {}

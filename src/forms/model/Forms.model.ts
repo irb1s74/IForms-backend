@@ -5,8 +5,10 @@ import {
   ForeignKey,
   Table,
   Model,
+  HasMany,
 } from 'sequelize-typescript';
 import { User } from '../../user/model/User.model';
+import { Questions } from '../../questions/model/Questions.model';
 
 interface FormsCreationAttrs {
   title: string;
@@ -32,4 +34,7 @@ export class Forms extends Model<Forms, FormsCreationAttrs> {
 
   @BelongsTo(() => User)
   author: User;
+
+  @HasMany(() => Questions)
+  questions: Questions[];
 }
