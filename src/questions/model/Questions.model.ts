@@ -33,7 +33,7 @@ export class Questions extends Model<Questions, QuestionsCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   type: string;
 
-  @Column({ type: DataType.BOOLEAN, allowNull: true })
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
   correct: boolean;
 
   @Column({ type: DataType.TEXT, allowNull: true })

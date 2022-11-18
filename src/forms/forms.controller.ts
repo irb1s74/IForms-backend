@@ -31,6 +31,12 @@ export class FormsController {
     return this.formsService.getFormById(postId);
   }
 
+  @Get('')
+  @UseGuards(JwtAuthGuard)
+  getFormsUser(@Req() request: { user: { id: number } }) {
+    return this.formsService.getForms(request.user.id);
+  }
+
   @Post('/update')
   @UseGuards(JwtAuthGuard)
   updateForms(@Body() dto: { formId: number; title: string }) {

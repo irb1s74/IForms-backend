@@ -6,6 +6,14 @@ import { Questions } from '../questions/model/Questions.model';
 export class FormsService {
   constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
 
+  async getForms(userId: number) {
+    return await this.formsRepo.findAll({
+      where: {
+        userId: userId,
+      },
+    });
+  }
+
   async getFormById(formId: number) {
     return await this.formsRepo.findByPk(formId, {
       include: {
