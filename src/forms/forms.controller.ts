@@ -27,8 +27,8 @@ export class FormsController {
 
   @Get('/:id')
   @UseGuards(JwtAuthGuard)
-  getForm(@Param('id') postId) {
-    return this.formsService.getFormById(postId);
+  getForm(@Param('id') formId) {
+    return this.formsService.getFormById(formId);
   }
 
   @Get('')
@@ -43,9 +43,9 @@ export class FormsController {
     return this.formsService.updateForm(dto.formId, dto.title);
   }
 
-  @Delete('/delete')
+  @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
-  deleteForms(@Body() dto: { formId: number }) {
-    return this.formsService.deleteForm(dto.formId);
+  deleteForms(@Req() request: { user: { id: number } }, @Param('id') formId) {
+    return this.formsService.deleteForm(request.user.id, formId);
   }
 }

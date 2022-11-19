@@ -37,10 +37,14 @@ export class FormsService {
     }
   }
 
-  async deleteForm(formId: number) {
+  async deleteForm(userId: number, formId: number) {
     try {
-      await this.formsRepo.destroy({ where: { id: formId } });
-      return new HttpException('Форма удалена', HttpStatus.OK);
+      const form = await this.formsRepo.findByPk(formId);
+      if ((form.userId = userId)) {
+        await form.destroy();
+        return new HttpException('Форма удалена', HttpStatus.OK);
+      }
+      return new HttpException('Нет прав', HttpStatus.FORBIDDEN);
     } catch (e) {
       throw new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
     }
