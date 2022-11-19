@@ -6,11 +6,13 @@ import { UserModule } from './user/user.module';
 import { User } from './user/model/User.model';
 import { Forms } from './forms/model/Forms.model';
 import { FormsModule } from './forms/forms.module';
-import { resolve } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { QuestionsModule } from './questions/questions.module';
 import { Questions } from './questions/model/Questions.model';
+import { VariantModule } from './variant/variant.module';
+import { Variant } from './variant/model/Variant.model';
+import { resolve } from 'path';
 
 @Module({
   controllers: [],
@@ -29,7 +31,7 @@ import { Questions } from './questions/model/Questions.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Forms, Questions],
+      models: [User, Forms, Questions, Variant],
       autoLoadModels: true,
     }),
     UserModule,
@@ -37,6 +39,7 @@ import { Questions } from './questions/model/Questions.model';
     AuthModule,
     FileModule,
     QuestionsModule,
+    VariantModule,
   ],
 })
 export class AppModule {}

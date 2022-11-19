@@ -19,7 +19,8 @@ export class QuestionsService {
     try {
       const form = await this.formsService.getFormById(formId);
       if (form.userId === userId) {
-        return await this.questionsRepo.create({ formId, type });
+        await this.questionsRepo.create({ formId, type });
+        return this.formsService.getFormById(formId);
       }
       return new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
     } catch (e) {

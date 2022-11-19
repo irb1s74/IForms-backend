@@ -5,8 +5,10 @@ import {
   ForeignKey,
   Table,
   Model,
+  HasMany,
 } from 'sequelize-typescript';
 import { Forms } from '../../forms/model/Forms.model';
+import { Variant } from '../../variant/model/Variant.model';
 
 interface QuestionsCreationAttrs {
   formId: number;
@@ -34,11 +36,11 @@ export class Questions extends Model<Questions, QuestionsCreationAttrs> {
   type: string;
 
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
-  correct: boolean;
-
-  @Column({ type: DataType.TEXT, allowNull: true })
-  answer: string;
+  multipleAnswers: boolean;
 
   @BelongsTo(() => Forms)
   form: Forms;
+
+  @HasMany(() => Variant)
+  variants: Variant[];
 }
