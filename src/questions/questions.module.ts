@@ -19,5 +19,6 @@ import { FormsModule } from '../forms/forms.module';
       },
     }),
   ],
+  exports: [QuestionsService],
 })
 export class QuestionsModule {}

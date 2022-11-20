@@ -9,7 +9,6 @@ import {
 import { Questions } from '../../questions/model/Questions.model';
 
 interface VariantCreationAttrs {
-  title: string;
   questionId: number;
 }
 
@@ -23,7 +22,7 @@ export class Variant extends Model<Variant, VariantCreationAttrs> {
   })
   id: number;
 
-  @Column({ type: DataType.STRING, allowNull: false })
+  @Column({ type: DataType.STRING, allowNull: true })
   title: string;
 
   @Column({ type: DataType.BOOLEAN, defaultValue: false })

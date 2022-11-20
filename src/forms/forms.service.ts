@@ -19,6 +19,7 @@ export class FormsService {
     return await this.formsRepo.findByPk(formId, {
       include: {
         model: Questions,
+        include: [Variant],
       },
     });
   }

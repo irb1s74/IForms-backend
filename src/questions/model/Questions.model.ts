@@ -35,8 +35,8 @@ export class Questions extends Model<Questions, QuestionsCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   type: string;
 
-  @Column({ type: DataType.BOOLEAN, defaultValue: false })
-  multipleAnswers: boolean;
+  @Column({ type: DataType.BOOLEAN, defaultValue: true })
+  required: boolean;
 
   @BelongsTo(() => Forms)
   form: Forms;

@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { QuestionsService } from './questions.service';
 
@@ -23,13 +31,24 @@ export class QuestionsController {
 
   @Post('/update')
   @UseGuards(JwtAuthGuard)
-  updateQuestion(@Body() dto: { formId: number; title: string }) {
-    return this.questionService.updateQuestions(dto.formId, dto.title);
+  updateQuestion(
+    @Body()
+    dto: {
+      formId: number;
+      title: string;
+      type: string;
+      required: boolean;
+    },
+  ) {
+    return this.questionService.updateQuestions(dto);
   }
 
-  @Delete('/delete')
+  @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
-  deleteQuestion(@Body() dto: { questionId: number }) {
-    return this.questionService.deleteQuestions(dto.questionId);
+  deleteQuestion(
+    @Req() request: { user: { id: number } },
+    @Param('id') questionId,
+  ) {
+    return this.questionService.deleteQuestions(request.user.id, questionId);
   }
 }
