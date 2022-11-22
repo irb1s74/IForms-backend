@@ -27,7 +27,8 @@ export class QuestionsService {
     try {
       const form = await this.formsService.getFormById(formId);
       if (form.userId === userId) {
-        return await this.questionsRepo.create({ formId, type });
+        await this.questionsRepo.create({ formId, type });
+        return await this.formsService.getFormById(formId);
       }
       return new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
     } catch (e) {
@@ -64,7 +65,7 @@ export class QuestionsService {
       const form = await this.formsService.getFormById(question.formId);
       if (form.userId === userId) {
         await question.destroy();
-        return new HttpException('Вопрос удален', HttpStatus.OK);
+        return await this.formsService.getFormById(question.formId);
       }
       return new HttpException('Нету доступа', HttpStatus.FORBIDDEN);
     } catch (e) {

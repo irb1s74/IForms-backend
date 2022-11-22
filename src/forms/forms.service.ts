@@ -21,6 +21,10 @@ export class FormsService {
         model: Questions,
         include: [Variant],
       },
+      order: [
+        ['questions', 'id'],
+        ['questions', 'variants', 'id'],
+      ],
     });
   }
 

@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { VariantService } from './variant.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 
@@ -14,5 +22,37 @@ export class VariantController {
     request: { user: { id: number } },
   ) {
     return this.variantService.createVariant(dto.questionId);
+  }
+
+  @Post('/update')
+  @UseGuards(JwtAuthGuard)
+  updateQuestion(
+    @Body()
+    dto: {
+      questionId: number;
+      variantId: number;
+      title: string;
+      correct: boolean;
+    },
+    @Req()
+    request: { user: { id: number } },
+  ) {
+    return this.variantService.updateVariant(
+      dto.questionId,
+      request.user.id,
+      dto.variantId,
+      dto.title,
+      dto.correct,
+    );
+  }
+
+  @Delete('/delete/:id')
+  @UseGuards(JwtAuthGuard)
+  deleteQuestion(
+    @Param('id') variantId,
+    @Req()
+    request: { user: { id: number } },
+  ) {
+    return this.variantService.deleteVariant(variantId, request.user.id);
   }
 }
