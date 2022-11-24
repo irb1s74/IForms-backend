@@ -15,6 +15,7 @@ import { Variant } from './variant/model/Variant.model';
 import { AnswersModule } from './answers/answers.module';
 import { Answers } from './answers/model/Answers.model';
 import { resolve } from 'path';
+import { Reply } from './answers/model/Reply.model';
 
 @Module({
   controllers: [],
@@ -33,7 +34,7 @@ import { resolve } from 'path';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Forms, Questions, Variant, Answers],
+      models: [User, Forms, Questions, Variant, Answers, Reply],
       autoLoadModels: true,
     }),
     UserModule,

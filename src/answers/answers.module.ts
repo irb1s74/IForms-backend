@@ -5,12 +5,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Answers } from './model/Answers.model';
 import { QuestionsModule } from '../questions/questions.module';
 import { JwtModule } from '@nestjs/jwt';
+import { Reply } from './model/Reply.model';
 
 @Module({
   providers: [AnswersService],
   controllers: [AnswersController],
   imports: [
-    SequelizeModule.forFeature([Answers]),
+    SequelizeModule.forFeature([Answers, Reply]),
     QuestionsModule,
     JwtModule.register({
       secret: process.env.PRIVATE_KEY || 'SECRET_DEV',

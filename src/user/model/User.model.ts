@@ -1,6 +1,6 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Forms } from '../../forms/model/Forms.model';
-import { Answers } from '../../answers/model/Answers.model';
+import { Reply } from '../../answers/model/Reply.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -33,6 +33,6 @@ export class User extends Model<User, UserCreationAttrs> {
   @HasMany(() => Forms)
   forms: Forms[];
 
-  @HasMany(() => Answers)
-  answers: Answers[];
+  @HasMany(() => Reply)
+  reply: Reply[];
 }

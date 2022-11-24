@@ -6,12 +6,12 @@ import {
   Table,
   Model,
 } from 'sequelize-typescript';
+import { Reply } from './Reply.model';
 import { Questions } from '../../questions/model/Questions.model';
-import { User } from '../../user/model/User.model';
 
 export interface AnswersCreationAttrs {
   questionId: number;
-  userId: number;
+  replyId: number;
   title: string;
 }
 
@@ -29,16 +29,16 @@ export class Answers extends Model<Answers, AnswersCreationAttrs> {
   title: string;
 
   @Column({ type: DataType.INTEGER, allowNull: false })
+  @ForeignKey(() => Reply)
+  replyId: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })
   @ForeignKey(() => Questions)
   questionId: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  @ForeignKey(() => User)
-  userId: number;
+  @BelongsTo(() => Reply)
+  reply: Reply;
 
   @BelongsTo(() => Questions)
-  question: Questions;
-
-  @BelongsTo(() => User)
-  user: User;
+  questions: Questions;
 }
