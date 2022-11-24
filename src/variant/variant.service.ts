@@ -39,7 +39,7 @@ export class VariantService {
         variant.correct = correct;
         return await variant.save();
       }
-      new HttpException('Нету доступа', HttpStatus.FORBIDDEN);
+      return new HttpException('Нету доступа', HttpStatus.FORBIDDEN);
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }

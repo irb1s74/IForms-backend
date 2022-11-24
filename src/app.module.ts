@@ -12,6 +12,8 @@ import { QuestionsModule } from './questions/questions.module';
 import { Questions } from './questions/model/Questions.model';
 import { VariantModule } from './variant/variant.module';
 import { Variant } from './variant/model/Variant.model';
+import { AnswersModule } from './answers/answers.module';
+import { Answers } from './answers/model/Answers.model';
 import { resolve } from 'path';
 
 @Module({
@@ -31,7 +33,7 @@ import { resolve } from 'path';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Forms, Questions, Variant],
+      models: [User, Forms, Questions, Variant, Answers],
       autoLoadModels: true,
     }),
     UserModule,
@@ -40,6 +42,7 @@ import { resolve } from 'path';
     FileModule,
     QuestionsModule,
     VariantModule,
+    AnswersModule,
   ],
 })
 export class AppModule {}

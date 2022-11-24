@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { Forms } from '../../forms/model/Forms.model';
 import { Variant } from '../../variant/model/Variant.model';
+import { Answers } from '../../answers/model/Answers.model';
 
 interface QuestionsCreationAttrs {
   formId: number;
@@ -43,4 +44,7 @@ export class Questions extends Model<Questions, QuestionsCreationAttrs> {
 
   @HasMany(() => Variant)
   variants: Variant[];
+
+  @HasMany(() => Answers)
+  answers: Answers[];
 }

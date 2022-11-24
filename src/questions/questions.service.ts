@@ -40,22 +40,22 @@ export class QuestionsService {
     type,
     title,
     required,
-    formId,
+    questionId,
   }: {
-    formId: number;
+    questionId: number;
     title: string;
     type: string;
     required: boolean;
   }) {
     try {
-      const question = await this.questionsRepo.findByPk(formId);
+      const question = await this.questionsRepo.findByPk(questionId);
       question.title = title;
       question.type = type;
       question.required = required;
       await question.save();
       return question;
     } catch (e) {
-      throw new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
+      return new HttpException(e, HttpStatus.BAD_REQUEST);
     }
   }
 

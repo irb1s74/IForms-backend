@@ -34,7 +34,7 @@ export class QuestionsController {
   updateQuestion(
     @Body()
     dto: {
-      formId: number;
+      questionId: number;
       title: string;
       type: string;
       required: boolean;
