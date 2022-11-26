@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../../user/model/User.model';
 import { Questions } from '../../questions/model/Questions.model';
+import { Reply } from '../../answers/model/Reply.model';
 
 interface FormsCreationAttrs {
   title: string;
@@ -37,4 +38,7 @@ export class Forms extends Model<Forms, FormsCreationAttrs> {
 
   @HasMany(() => Questions)
   questions: Questions[];
+
+  @HasMany(() => Reply)
+  reply: Reply[];
 }

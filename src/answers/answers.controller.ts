@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { AnswersService } from './answers.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { AnswersCreationAttrs } from './model/Answers.model';
 
 @Controller('answers')
 export class AnswersController {
@@ -10,13 +9,14 @@ export class AnswersController {
   @Post('/create')
   @UseGuards(JwtAuthGuard)
   createQuestion(
-    @Body() dto: AnswersCreationAttrs[],
+    @Body() dto: { questionId: number; title: string; replyId: number },
     @Req()
     request: { user: { id: number } },
   ) {
-    return this.answersService.replyAnswers({
-      questions: dto,
-      userId: request.user.id,
+    return this.answersService.createAnswer({
+      questionId: dto.questionId,
+      title: dto.title,
+      replyId: dto.replyId,
     });
   }
 
@@ -27,9 +27,19 @@ export class AnswersController {
     @Req()
     request: { user: { id: number } },
   ) {
-    return this.answersService.foundOreCreateReply({
+    return this.answersService.findOreCreateReply({
       formId: dto.formId,
       userId: request.user.id,
     });
+  }
+
+  @Post('/reply')
+  @UseGuards(JwtAuthGuard)
+  saveReply(
+    @Body() dto: { replyId: number },
+    @Req()
+    request: { user: { id: number } },
+  ) {
+    return this.answersService.saveReply(dto.replyId);
   }
 }

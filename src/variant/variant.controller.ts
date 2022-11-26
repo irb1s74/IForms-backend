@@ -32,7 +32,6 @@ export class VariantController {
       questionId: number;
       variantId: number;
       title: string;
-      correct: boolean;
     },
     @Req()
     request: { user: { id: number } },
@@ -42,7 +41,6 @@ export class VariantController {
       request.user.id,
       dto.variantId,
       dto.title,
-      dto.correct,
     );
   }
 

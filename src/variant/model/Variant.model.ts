@@ -25,9 +25,6 @@ export class Variant extends Model<Variant, VariantCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: true })
   title: string;
 
-  @Column({ type: DataType.BOOLEAN, defaultValue: false })
-  correct: boolean;
-
   @Column({ type: DataType.INTEGER, allowNull: false })
   @ForeignKey(() => Questions)
   questionId: number;

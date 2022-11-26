@@ -28,7 +28,6 @@ export class VariantService {
     userId: number,
     variantId: number,
     title: string,
-    correct: boolean,
   ) {
     try {
       const question = await this.questionsService.getQuestionById(questionId);
@@ -36,7 +35,6 @@ export class VariantService {
       const variant = await this.variantRepo.findByPk(variantId);
       if (form.userId === userId && variant) {
         variant.title = title;
-        variant.correct = correct;
         return await variant.save();
       }
       return new HttpException('Нету доступа', HttpStatus.FORBIDDEN);

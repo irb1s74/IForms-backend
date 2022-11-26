@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Answers, AnswersCreationAttrs } from './model/Answers.model';
+import { Answers } from './model/Answers.model';
 import { Reply } from './model/Reply.model';
 import { Op } from 'sequelize';
 import { QuestionsService } from '../questions/questions.service';
@@ -13,7 +13,7 @@ export class AnswersService {
     private questionsService: QuestionsService,
   ) {}
 
-  async foundOreCreateReply({
+  async findOreCreateReply({
     formId,
     userId,
   }: {
@@ -23,8 +23,7 @@ export class AnswersService {
     try {
       const [reply] = await this.replyRepo.findOrCreate({
         where: {
-          [Op.and]: [{ formId: formId }],
-          [Op.and]: [{ userId: userId }],
+          [Op.and]: [{ formId: formId }, { userId: userId }, { draft: true }],
         },
         defaults: {
           formId: formId,
@@ -77,15 +76,11 @@ export class AnswersService {
     }
   }
 
-  async replyAnswers(dto: {
-    questions: AnswersCreationAttrs[];
-    userId: number;
-  }) {
+  async saveReply(replyId: number) {
     try {
-      dto.questions.forEach((answer) => {
-        this.createAnswer({ ...answer, replyId: dto.userId });
-      });
-      return new HttpException('Тест пройден', HttpStatus.OK);
+      const reply = await this.replyRepo.findByPk(replyId);
+      reply.draft = false;
+      return await reply.save();
     } catch (e) {
       return new HttpException(e, HttpStatus.BAD_REQUEST);
     }

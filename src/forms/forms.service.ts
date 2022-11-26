@@ -3,6 +3,9 @@ import { Forms } from './model/Forms.model';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Questions } from '../questions/model/Questions.model';
 import { Variant } from '../variant/model/Variant.model';
+import { Op } from 'sequelize';
+import { Reply } from '../answers/model/Reply.model';
+import { Answers } from '../answers/model/Answers.model';
 
 export class FormsService {
   constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
@@ -17,10 +20,19 @@ export class FormsService {
 
   async getFormById(formId: number) {
     return await this.formsRepo.findByPk(formId, {
-      include: {
-        model: Questions,
-        include: [Variant],
-      },
+      include: [
+        {
+          model: Questions,
+          include: [Variant],
+        },
+        {
+          model: Reply,
+          where: {
+            draft: false,
+          },
+          include: [Answers],
+        },
+      ],
       order: [
         ['questions', 'id'],
         ['questions', 'variants', 'id'],
@@ -45,14 +57,18 @@ export class FormsService {
 
   async deleteForm(userId: number, formId: number) {
     try {
-      const form = await this.formsRepo.findByPk(formId);
-      if ((form.userId = userId)) {
+      const form = await this.formsRepo.findOne({
+        where: { [Op.and]: [{ id: formId }, { userId: userId }] },
+        include: [{ model: Reply, include: [Answers] }],
+      });
+      if (form) {
         await form.destroy();
         return new HttpException('Форма удалена', HttpStatus.OK);
       }
-      return new HttpException('Нет прав', HttpStatus.FORBIDDEN);
+      return new HttpException('Форма не найдена', HttpStatus.BAD_REQUEST);
     } catch (e) {
-      throw new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
+      console.log(e);
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
   }
 }
