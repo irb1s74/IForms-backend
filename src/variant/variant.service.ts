@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Variant } from './model/Variant.model';
 import { FormsService } from '../forms/forms.service';
 import { QuestionsService } from '../questions/questions.service';
-import { where } from 'sequelize';
 
 @Injectable()
 export class VariantService {

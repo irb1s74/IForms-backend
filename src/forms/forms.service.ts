@@ -19,25 +19,32 @@ export class FormsService {
   }
 
   async getFormById(formId: number) {
-    return await this.formsRepo.findByPk(formId, {
-      include: [
-        {
-          model: Questions,
-          include: [Variant],
-        },
-        {
-          model: Reply,
-          where: {
-            draft: false,
+    try {
+      return await this.formsRepo.findByPk(formId, {
+        include: [
+          {
+            model: Questions,
+            required: false,
+            include: [Variant],
           },
-          include: [Answers],
-        },
-      ],
-      order: [
-        ['questions', 'id'],
-        ['questions', 'variants', 'id'],
-      ],
-    });
+          {
+            model: Reply,
+            required: false,
+            where: {
+              draft: false,
+            },
+            include: [Answers],
+          },
+        ],
+        order: [
+          ['questions', 'id'],
+          ['questions', 'variants', 'id'],
+        ],
+      });
+    } catch (e) {
+      console.log(e);
+      throw new HttpException('Неправильный запрос', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async formsCreate(userId: number, title: string) {

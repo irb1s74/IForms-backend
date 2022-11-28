@@ -45,42 +45,39 @@ export class AnswersService {
     replyId: number;
   }) {
     try {
-      const answer = await this.answersRepo.findOne({
-        where: {
-          [Op.and]: [{ questionId: dto.questionId }, { replyId: dto.replyId }],
-        },
+      return await this.answersRepo.create({
+        questionId: dto.questionId,
+        title: dto.title,
+        replyId: dto.replyId,
       });
-      if (answer) {
-        const question = await this.questionsService.getQuestionById(
-          dto.questionId,
-        );
-        if (question.type === 'checkbox') {
-          return await this.answersRepo.create({
-            questionId: dto.questionId,
-            title: dto.title,
-            replyId: dto.replyId,
-          });
-        }
-        answer.title = dto.title;
-        await answer.save();
-        return answer;
-      } else {
-        return await this.answersRepo.create({
-          questionId: dto.questionId,
-          title: dto.title,
-          replyId: dto.replyId,
-        });
-      }
     } catch (e) {
       return new HttpException(e, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async saveReply(replyId: number) {
+  async unDraftReply(replyId: number) {
     try {
       const reply = await this.replyRepo.findByPk(replyId);
       reply.draft = false;
       return await reply.save();
+    } catch (e) {
+      return new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async saveReply(replyId: number, answers: Record<number, string | string[]>) {
+    try {
+      for (const [id, title] of Object.entries(answers)) {
+        const questionId = Number(id);
+        if (Array.isArray(title)) {
+          title.forEach((title) =>
+            this.createAnswer({ questionId, title, replyId }),
+          );
+        } else {
+          await this.createAnswer({ questionId, title, replyId });
+        }
+      }
+      return await this.unDraftReply(replyId);
     } catch (e) {
       return new HttpException(e, HttpStatus.BAD_REQUEST);
     }

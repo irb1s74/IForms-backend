@@ -36,10 +36,11 @@ export class AnswersController {
   @Post('/reply')
   @UseGuards(JwtAuthGuard)
   saveReply(
-    @Body() dto: { replyId: number },
+    @Body()
+    dto: { replyId: number; answers: Record<number, string | string[]> },
     @Req()
     request: { user: { id: number } },
   ) {
-    return this.answersService.saveReply(dto.replyId);
+    return this.answersService.saveReply(dto.replyId, dto.answers);
   }
 }
