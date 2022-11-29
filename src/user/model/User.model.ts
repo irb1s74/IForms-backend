@@ -30,6 +30,9 @@ export class User extends Model<User, UserCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: true })
   avatar: string;
 
+  @Column({ type: DataType.STRING, defaultValue: 'employee' })
+  role: string;
+
   @HasMany(() => Forms)
   forms: Forms[];
 

@@ -43,13 +43,14 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  private async generateToken({ email, id, full_name, avatar }) {
+  private async generateToken({ email, id, full_name, avatar, role }) {
     return {
       id,
       email,
       avatar,
       full_name,
-      token: this.jwtService.sign({ email, id }),
+      role,
+      token: this.jwtService.sign({ email, id, role }),
     };
   }
 

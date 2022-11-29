@@ -3,9 +3,9 @@ import { Forms } from './model/Forms.model';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Questions } from '../questions/model/Questions.model';
 import { Variant } from '../variant/model/Variant.model';
-import { Op } from 'sequelize';
 import { Reply } from '../answers/model/Reply.model';
 import { Answers } from '../answers/model/Answers.model';
+import { Op } from 'sequelize';
 
 export class FormsService {
   constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
