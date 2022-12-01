@@ -2,11 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Questions } from './model/Questions.model';
 import { FormsService } from '../forms/forms.service';
+import { FileService } from '../file/file.service';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectModel(Questions) private questionsRepo: typeof Questions,
+    private filesService: FileService,
     private formsService: FormsService,
   ) {}
 
@@ -52,6 +54,19 @@ export class QuestionsService {
       question.title = title;
       question.type = type;
       question.required = required;
+      await question.save();
+      return question;
+    } catch (e) {
+      return new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updateImageQuestion(questionId: number, image: any) {
+    try {
+      const imagePath = await this.filesService.createFile(image, 'questions');
+      const question = await this.questionsRepo.findByPk(questionId);
+      question.title = imagePath;
+      question.type = 'image';
       await question.save();
       return question;
     } catch (e) {

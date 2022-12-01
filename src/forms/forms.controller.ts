@@ -34,7 +34,7 @@ export class FormsController {
   @Get('')
   @UseGuards(JwtAuthGuard)
   getFormsUser(@Req() request: { user: { id: number } }) {
-    return this.formsService.getForms(request.user.id);
+    return this.formsService.getForms();
   }
 
   @Post('/update')

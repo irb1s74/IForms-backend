@@ -5,14 +5,14 @@ import { Questions } from '../questions/model/Questions.model';
 import { Variant } from '../variant/model/Variant.model';
 import { Reply } from '../answers/model/Reply.model';
 import { Answers } from '../answers/model/Answers.model';
-import sequelize, { Op } from 'sequelize';
+import { Op } from 'sequelize';
 import { User } from '../user/model/User.model';
 import { Subdivision } from '../subdivision/model/Subdivision.model';
 
 export class FormsService {
   constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
 
-  async getForms(userId: number) {
+  async getForms() {
     return await this.formsRepo.findAll({});
   }
 

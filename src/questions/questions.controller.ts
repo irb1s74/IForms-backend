@@ -5,10 +5,14 @@ import {
   Param,
   Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { QuestionsService } from './questions.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 
 @Controller('questions')
 export class QuestionsController {
@@ -41,6 +45,19 @@ export class QuestionsController {
     },
   ) {
     return this.questionService.updateQuestions(dto);
+  }
+
+  @Post('/image')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  updateImage(
+    @UploadedFile() image,
+    @Body()
+    dto: {
+      questionId: number;
+    },
+  ) {
+    return this.questionService.updateImageQuestion(dto.questionId, image);
   }
 
   @Delete('/delete/:id')
