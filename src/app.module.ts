@@ -16,6 +16,8 @@ import { AnswersModule } from './answers/answers.module';
 import { Answers } from './answers/model/Answers.model';
 import { resolve } from 'path';
 import { Reply } from './answers/model/Reply.model';
+import { SubdivisionModule } from './subdivision/subdivision.module';
+import { Subdivision } from './subdivision/model/Subdivision.model';
 
 @Module({
   controllers: [],
@@ -34,7 +36,7 @@ import { Reply } from './answers/model/Reply.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Forms, Questions, Variant, Answers, Reply],
+      models: [User, Forms, Questions, Variant, Answers, Reply, Subdivision],
       autoLoadModels: true,
     }),
     UserModule,
@@ -44,6 +46,7 @@ import { Reply } from './answers/model/Reply.model';
     QuestionsModule,
     VariantModule,
     AnswersModule,
+    SubdivisionModule,
   ],
 })
 export class AppModule {}

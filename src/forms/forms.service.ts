@@ -5,17 +5,15 @@ import { Questions } from '../questions/model/Questions.model';
 import { Variant } from '../variant/model/Variant.model';
 import { Reply } from '../answers/model/Reply.model';
 import { Answers } from '../answers/model/Answers.model';
-import { Op } from 'sequelize';
+import sequelize, { Op } from 'sequelize';
+import { User } from '../user/model/User.model';
+import { Subdivision } from '../subdivision/model/Subdivision.model';
 
 export class FormsService {
   constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
 
   async getForms(userId: number) {
-    return await this.formsRepo.findAll({
-      where: {
-        userId: userId,
-      },
-    });
+    return await this.formsRepo.findAll({});
   }
 
   async getFormById(formId: number) {
@@ -33,7 +31,16 @@ export class FormsService {
             where: {
               draft: false,
             },
-            include: [Answers],
+            include: [
+              {
+                model: Answers,
+              },
+              {
+                model: User,
+                attributes: { exclude: ['password'] },
+                include: [{ model: Subdivision, attributes: ['name'] }],
+              },
+            ],
           },
         ],
         order: [

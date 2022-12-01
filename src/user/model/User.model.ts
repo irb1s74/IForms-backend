@@ -1,6 +1,14 @@
-import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { Forms } from '../../forms/model/Forms.model';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  HasMany,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Reply } from '../../answers/model/Reply.model';
+import { Subdivision } from '../../subdivision/model/Subdivision.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -27,15 +35,19 @@ export class User extends Model<User, UserCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
 
+  @ForeignKey(() => Subdivision)
+  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 1 })
+  subdivisionId: number;
+
   @Column({ type: DataType.STRING, allowNull: true })
   avatar: string;
 
   @Column({ type: DataType.STRING, defaultValue: 'employee' })
   role: string;
 
-  @HasMany(() => Forms)
-  forms: Forms[];
-
   @HasMany(() => Reply)
   reply: Reply[];
+
+  @BelongsTo(() => Subdivision)
+  subdivision: Subdivision;
 }
