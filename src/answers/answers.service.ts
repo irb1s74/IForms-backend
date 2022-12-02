@@ -4,6 +4,9 @@ import { Answers } from './model/Answers.model';
 import { Reply } from './model/Reply.model';
 import { Op } from 'sequelize';
 import { QuestionsService } from '../questions/questions.service';
+import { utils, write, writeFile } from 'xlsx';
+import { resolve } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 
 @Injectable()
 export class AnswersService {
@@ -33,6 +36,34 @@ export class AnswersService {
           model: Answers,
         },
       });
+      return reply;
+    } catch (e) {
+      return new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async createExcelReply({ formId }: { formId: number }) {
+    try {
+      const reply = await this.replyRepo.findByPk(formId, {
+        include: {
+          model: Answers,
+        },
+      });
+
+      const workSheet = utils.json_to_sheet([reply.answers]);
+      const workBook = utils.book_new();
+      utils.book_append_sheet(workBook, workSheet, 'ответы');
+      write(workBook, { bookType: 'xlsx', type: 'buffer' });
+      write(workBook, { bookType: 'xlsx', type: 'binary' });
+
+      const filePath = resolve(__dirname, '..', `static/excels/${formId}.xlsx`);
+      if (!existsSync(filePath)) {
+        mkdirSync(filePath, { recursive: true });
+      }
+      writeFile(
+        workBook,
+        resolve(__dirname, '..', `static/excels/${formId}.xlsx`),
+      );
       return reply;
     } catch (e) {
       return new HttpException(e, HttpStatus.BAD_REQUEST);

@@ -33,14 +33,14 @@ export class FormsController {
 
   @Get('')
   @UseGuards(JwtAuthGuard)
-  getFormsUser(@Req() request: { user: { id: number } }) {
-    return this.formsService.getForms();
+  getFormsUser(@Req() request: { user: { id: number; role: string } }) {
+    return this.formsService.getForms(request.user.role);
   }
 
   @Post('/update')
   @UseGuards(JwtAuthGuard)
-  updateForms(@Body() dto: { formId: number; title: string }) {
-    return this.formsService.updateForm(dto.formId, dto.title);
+  updateForms(@Body() dto: { formId: number; title: string; date: string }) {
+    return this.formsService.updateForm(dto.formId, dto.title, dto.date);
   }
 
   @Delete('/delete/:id')

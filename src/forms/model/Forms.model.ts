@@ -29,6 +29,9 @@ export class Forms extends Model<Forms, FormsCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: false })
   title: string;
 
+  @Column({ type: DataType.DATE, allowNull: true })
+  date: string;
+
   @Column({ type: DataType.INTEGER, allowNull: false })
   @ForeignKey(() => User)
   userId: number;

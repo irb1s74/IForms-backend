@@ -33,6 +33,18 @@ export class AnswersController {
     });
   }
 
+  @Post('/excel')
+  @UseGuards(JwtAuthGuard)
+  getExcel(
+    @Body() dto: { formId: number },
+    @Req()
+    request: { user: { id: number } },
+  ) {
+    return this.answersService.createExcelReply({
+      formId: dto.formId,
+    });
+  }
+
   @Post('/reply')
   @UseGuards(JwtAuthGuard)
   saveReply(
