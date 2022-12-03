@@ -44,5 +44,5 @@ export class Reply extends Model<Reply, ReplyCreationAttrs> {
   user: User;
 
   @HasMany(() => Answers)
-  answers: Answers;
+  answers: Answers[];
 }

@@ -1,6 +1,16 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Header,
+  Post,
+  Req,
+  Res,
+  StreamableFile,
+  UseGuards,
+} from '@nestjs/common';
 import { AnswersService } from './answers.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { createReadStream, PathLike } from 'fs';
 
 @Controller('answers')
 export class AnswersController {
@@ -34,15 +44,17 @@ export class AnswersController {
   }
 
   @Post('/excel')
-  @UseGuards(JwtAuthGuard)
-  getExcel(
+  // @UseGuards(JwtAuthGuard)
+  async getExcel(
     @Body() dto: { formId: number },
     @Req()
     request: { user: { id: number } },
   ) {
-    return this.answersService.createExcelReply({
+    const filePath = await this.answersService.createExcelReply({
       formId: dto.formId,
     });
+    const file = createReadStream(filePath);
+    return new StreamableFile(file);
   }
 
   @Post('/reply')

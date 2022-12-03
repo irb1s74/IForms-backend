@@ -1,18 +1,21 @@
-import { IsString, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class UserCreateDto {
-  @IsString({ message: 'Must be a string' })
+  @IsString({ message: 'Должен быть строкой' })
+  @IsEmail(undefined, {
+    message: 'Не валидный email',
+  })
   readonly email: string;
 
-  @IsString({ message: 'Must be a string' })
-  @Length(1, 80, {
-    message: 'Full name don`t must be less than 1 and more than 20',
+  @IsString({ message: 'Должен быть строкой' })
+  @IsNotEmpty({
+    message: 'ФИО не может быть пустым',
   })
   readonly full_name: string;
 
-  @IsString({ message: 'Must be a string' })
+  @IsString({ message: 'Должен быть строкой' })
   @Length(6, 400, {
-    message: 'Password don`t must be less than 6 and more than 400',
+    message: 'Пароль  не должен быть меньше  6 символов',
   })
   readonly password: string;
 }
