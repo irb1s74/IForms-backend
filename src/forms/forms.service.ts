@@ -56,6 +56,7 @@ export class FormsService {
         order: [
           ['questions', 'id'],
           ['questions', 'variants', 'id'],
+          ['reply', 'answers', 'id'],
         ],
       });
     } catch (e) {

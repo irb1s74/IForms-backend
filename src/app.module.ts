@@ -50,3 +50,4 @@ import { Subdivision } from './subdivision/model/Subdivision.model';
   ],
 })
 export class AppModule {}
+console.log('ALE:::::::::::::::::::::::', process.env.POSTGRES_HOST);
