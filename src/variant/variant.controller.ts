@@ -49,8 +49,8 @@ export class VariantController {
   deleteQuestion(
     @Param('id') variantId,
     @Req()
-    request: { user: { id: number } },
+    request: { user: { id: number; role: string } },
   ) {
-    return this.variantService.deleteVariant(variantId, request.user.id);
+    return this.variantService.deleteVariant(variantId, request.user.role);
   }
 }

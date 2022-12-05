@@ -23,13 +23,14 @@ export class QuestionsController {
   createQuestion(
     @Body() dto: { formId: number; type: string; title: string },
     @Req()
-    request: { user: { id: number } },
+    @Req()
+    request: { user: { id: number; role: string } },
   ) {
     return this.questionService.questionsCreate(
       dto.formId,
       dto.title,
       dto.type,
-      request.user.id,
+      request.user.role,
     );
   }
 
@@ -63,9 +64,9 @@ export class QuestionsController {
   @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
   deleteQuestion(
-    @Req() request: { user: { id: number } },
+    @Req() request: { user: { id: number; role: string } },
     @Param('id') questionId,
   ) {
-    return this.questionService.deleteQuestions(request.user.id, questionId);
+    return this.questionService.deleteQuestions(request.user.role, questionId);
   }
 }

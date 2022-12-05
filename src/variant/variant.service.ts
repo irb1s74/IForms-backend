@@ -42,14 +42,13 @@ export class VariantService {
     }
   }
 
-  async deleteVariant(variantId: number, userId: number) {
+  async deleteVariant(variantId: number, role: string) {
     try {
       const variant = await this.variantRepo.findByPk(variantId);
       const question = await this.questionsService.getQuestionById(
         variant.questionId,
       );
-      const form = await this.formsService.getFormById(question.formId);
-      if (form.userId === userId) {
+      if (role === 'HR') {
         await variant.destroy();
         return await this.formsService.getFormById(question.formId);
       }

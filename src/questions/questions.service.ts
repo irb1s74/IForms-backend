@@ -24,11 +24,10 @@ export class QuestionsService {
     formId: number,
     title: string,
     type: string,
-    userId: number,
+    role: string,
   ) {
     try {
-      const form = await this.formsService.getFormById(formId);
-      if (form.userId === userId) {
+      if (role === 'HR') {
         await this.questionsRepo.create({ formId, type });
         return await this.formsService.getFormById(formId);
       }
@@ -74,11 +73,10 @@ export class QuestionsService {
     }
   }
 
-  async deleteQuestions(userId: number, questionId: number) {
+  async deleteQuestions(role: string, questionId: number) {
     try {
       const question = await this.questionsRepo.findByPk(questionId);
-      const form = await this.formsService.getFormById(question.formId);
-      if (form.userId === userId) {
+      if (role === 'HR') {
         await question.destroy();
         return await this.formsService.getFormById(question.formId);
       }
