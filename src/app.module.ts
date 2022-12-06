@@ -18,6 +18,7 @@ import { resolve } from 'path';
 import { Reply } from './answers/model/Reply.model';
 import { SubdivisionModule } from './subdivision/subdivision.module';
 import { Subdivision } from './subdivision/model/Subdivision.model';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   controllers: [],
@@ -25,6 +26,12 @@ import { Subdivision } from './subdivision/model/Subdivision.model';
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
+    }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp-relay.sendinblue.com',
+        auth: {},
+      },
     }),
     ServeStaticModule.forRoot({
       rootPath: resolve(__dirname, 'static'),

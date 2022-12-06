@@ -9,12 +9,14 @@ import { UserService } from '../user/user.service';
 import { hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginDto } from '../user/dto/UserLogin.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private mailService: MailerService,
   ) {}
 
   async reg(dto: UserCreateDto) {
@@ -35,6 +37,7 @@ export class AuthService {
 
   async login(userDto: UserLoginDto) {
     const user = await this.validate(userDto);
+
     return this.generateToken(user);
   }
 

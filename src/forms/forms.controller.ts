@@ -43,9 +43,21 @@ export class FormsController {
     return this.formsService.updateForm(dto.formId, dto.title, dto.date);
   }
 
+  @Get('/:id/publish')
+  @UseGuards(JwtAuthGuard)
+  publishForm(
+    @Req() request: { user: { id: number; role: string } },
+    @Param('id') formId,
+  ) {
+    return this.formsService.toPublishForm(request.user.role, formId);
+  }
+
   @Delete('/delete/:id')
   @UseGuards(JwtAuthGuard)
-  deleteForms(@Req() request: { user: { id: number } }, @Param('id') formId) {
-    return this.formsService.deleteForm(request.user.id, formId);
+  deleteForms(
+    @Req() request: { user: { id: number; role: string } },
+    @Param('id') formId,
+  ) {
+    return this.formsService.deleteForm(request.user.role, formId);
   }
 }

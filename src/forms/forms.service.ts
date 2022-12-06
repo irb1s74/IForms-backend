@@ -8,9 +8,15 @@ import { Answers } from '../answers/model/Answers.model';
 import { Op } from 'sequelize';
 import { User } from '../user/model/User.model';
 import { Subdivision } from '../subdivision/model/Subdivision.model';
+import { UserService } from '../user/user.service';
+import { MailerService } from '@nestjs-modules/mailer';
 
 export class FormsService {
-  constructor(@InjectModel(Forms) private formsRepo: typeof Forms) {}
+  constructor(
+    @InjectModel(Forms) private formsRepo: typeof Forms,
+    private userService: UserService,
+    private mailService: MailerService,
+  ) {}
 
   async getForms(role: string) {
     if (role === 'HR') {
@@ -18,8 +24,11 @@ export class FormsService {
     }
     return await this.formsRepo.findAll({
       where: {
-        date: {
-          [Op.gt]: new Date(),
+        [Op.and]: {
+          date: {
+            [Op.gt]: new Date(),
+          },
+          published: true,
         },
       },
     });
@@ -80,19 +89,72 @@ export class FormsService {
     }
   }
 
-  async deleteForm(userId: number, formId: number) {
+  async toPublishForm(role: string, formId: number) {
     try {
-      const form = await this.formsRepo.findOne({
-        where: { [Op.and]: [{ id: formId }, { userId: userId }] },
-        include: [{ model: Reply, include: [Answers] }],
-      });
-      if (form) {
+      if (role === 'HR') {
+        const form = await this.formsRepo.findOne({
+          where: { id: formId },
+          include: [
+            {
+              model: Questions,
+              required: false,
+              include: [Variant],
+            },
+            {
+              model: Reply,
+              required: false,
+              where: {
+                draft: false,
+              },
+              include: [
+                {
+                  model: Answers,
+                  required: false,
+                },
+                {
+                  model: User,
+                  attributes: { exclude: ['password'] },
+                  include: [{ model: Subdivision, attributes: ['name'] }],
+                },
+              ],
+            },
+          ],
+          order: [
+            ['questions', 'id'],
+            ['questions', 'variants', 'id'],
+            ['reply', 'answers', 'id'],
+          ],
+        });
+        form.published = !form.published;
+        await form.save();
+        if (form.published) {
+          const users = await this.userService.findEmployee();
+          users.forEach((user) => {
+            this.mailService.sendMail({
+              to: user.email,
+              from: 'kolyirb1s@gmail.com',
+              subject: '',
+              text: 'Появились новые опросы',
+            });
+          });
+        }
+        return form;
+      }
+      return new HttpException('Нет доступа', HttpStatus.FORBIDDEN);
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async deleteForm(role: string, formId: number) {
+    try {
+      if (role === 'HR') {
+        const form = await this.formsRepo.findByPk(formId);
         await form.destroy();
         return new HttpException('Форма удалена', HttpStatus.OK);
       }
-      return new HttpException('Форма не найдена', HttpStatus.BAD_REQUEST);
+      return new HttpException('Нет доступа', HttpStatus.FORBIDDEN);
     } catch (e) {
-      console.log(e);
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
   }

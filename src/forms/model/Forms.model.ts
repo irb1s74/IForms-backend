@@ -36,6 +36,9 @@ export class Forms extends Model<Forms, FormsCreationAttrs> {
   @ForeignKey(() => User)
   userId: number;
 
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  published: boolean;
+
   @BelongsTo(() => User)
   author: User;
 

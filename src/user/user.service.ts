@@ -11,6 +11,10 @@ export class UserService {
     private filesService: FileService,
   ) {}
 
+  async findEmployee() {
+    return this.userRepo.findAll({ where: { role: 'employee' } });
+  }
+
   async userCreate(dto: UserCreateDto) {
     return await this.userRepo.create(dto);
   }

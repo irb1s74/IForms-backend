@@ -70,17 +70,15 @@ export class AnswersService {
         });
       });
     });
-    console.log(data);
 
     const workSheet = utils.json_to_sheet(data);
     const workBook = utils.book_new();
     utils.book_append_sheet(workBook, workSheet, 'results');
     write(workBook, { bookType: 'xlsx', type: 'buffer' });
     write(workBook, { bookType: 'xlsx', type: 'binary' });
-
     const filePath = resolve(__dirname, '..', `static/excels/${formId}.xlsx`);
-    if (!existsSync(filePath)) {
-      mkdirSync(filePath, { recursive: true });
+    if (!existsSync(resolve(__dirname, '..', `static/excels`))) {
+      mkdirSync(resolve(__dirname, '..', `static/excels`), { recursive: true });
     }
     writeFile(workBook, filePath);
     return filePath;
