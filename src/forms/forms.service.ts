@@ -26,7 +26,7 @@ export class FormsService {
       where: {
         [Op.and]: {
           date: {
-            [Op.gt]: new Date(),
+            [Op.or]: [{ [Op.gt]: new Date() }, null],
           },
           published: true,
         },
