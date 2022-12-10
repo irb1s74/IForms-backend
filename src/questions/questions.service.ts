@@ -62,10 +62,31 @@ export class QuestionsService {
 
   async updateImageQuestion(questionId: number, image: any) {
     try {
-      const imagePath = await this.filesService.createFile(image, 'questions');
+      const imagePath = await this.filesService.createFile(
+        image,
+        'jpg',
+        'questions/images',
+      );
       const question = await this.questionsRepo.findByPk(questionId);
       question.title = imagePath;
       question.type = 'image';
+      await question.save();
+      return question;
+    } catch (e) {
+      return new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updateVideoQuestion(questionId: number, video: any) {
+    try {
+      const videoPath = await this.filesService.createFile(
+        video,
+        'mp4',
+        'questions/videos',
+      );
+      const question = await this.questionsRepo.findByPk(questionId);
+      question.title = videoPath;
+      question.type = 'video';
       await question.save();
       return question;
     } catch (e) {

@@ -25,7 +25,11 @@ export class UserService {
 
   async updateAvatar(avatar: any, req) {
     try {
-      const avatarPath = await this.filesService.createFile(avatar, 'avatars');
+      const avatarPath = await this.filesService.createFile(
+        avatar,
+        'jpg',
+        'avatars',
+      );
       const user = await this.userFindByEmail(req.user.email);
       user.avatar = avatarPath;
       await user.save();
